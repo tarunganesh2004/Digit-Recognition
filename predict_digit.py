@@ -1,7 +1,7 @@
 import numpy as np
+import matplotlib.pyplot as plt
 import cv2
 from tensorflow import keras
-from google.colab.patches import cv2_imshow  # Use only if running in Google Colab
 
 
 def load_model(model_path="mnist_model.h5"):
@@ -22,7 +22,7 @@ def preprocess_image(image_path):
     resized_image = cv2.resize(input_image, (28, 28))  # Resize to 28x28
     normalized_image = resized_image / 255.0  # Normalize pixel values
     reshaped_image = np.reshape(normalized_image, (1, 28, 28))  # Reshape for the model
-    return reshaped_image
+    return reshaped_image,resized_image
 
 
 def predict_digit(model, processed_image):
@@ -36,7 +36,9 @@ def predict_digit(model, processed_image):
 # Example Usage
 if __name__ == "__main__":
     model = load_model("mnist_model.h5")  
-    image_path = "/test.png" 
-    processed_image = preprocess_image(image_path)  
-    cv2_imshow(cv2.imread(image_path))  
+    image_path = "test.png" 
+    processed_image ,display_image= preprocess_image(image_path)  
+    plt.imshow(display_image, cmap='gray')
+    plt.title("Input Image")
+    plt.show()
     predict_digit(model, processed_image)  
