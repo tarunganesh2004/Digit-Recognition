@@ -4,48 +4,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Digit Classifier</title>
-    <!-- Bootstrap CSS -->
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Handwritten Digit Recognition</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 
-<body class="bg-light">
-
+<body>
     <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-6">
-                <div class="card shadow mt-5">
-                    <div class="card-header text-center">
-                        <h2>Digit Classifier</h2>
-                        <p class="text-muted">Upload an image of a handwritten digit (0-9)</p>
-                    </div>
-                    <div class="card-body">
-                        <form action="/" method="post" enctype="multipart/form-data" class="text-center">
-                            <div class="form-group">
-                                <input type="file" name="file" class="form-control-file" required>
-                            </div>
-                            <button type="submit" class="btn btn-primary btn-block">Classify Digit</button>
-                        </form>
+        <h1>Handwritten Digit Recognition</h1>
+        <p>Upload an image of a handwritten digit (0-9) and click Predict.</p>
 
-                        {% if label is not none %}
-                        <div class="result mt-4 text-center">
-                            <h4>Predicted Digit: <span class="badge badge-success">{{ label }}</span></h4>
-                            <img src="{{ user_image }}" alt="Uploaded Image" class="img-thumbnail mt-3"
-                                style="width: 150px;">
-                        </div>
-                        {% endif %}
-                    </div>
+        <form method="post" enctype="multipart/form-data">
+            <input type="file" name="file" accept=".png,.jpg,.jpeg" required>
+            <button type="submit">Predict</button>
+        </form>
+
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <div class="error">
+            {% for message in messages %}
+            <p>{{ message }}</p>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% endwith %}
+
+        {% if prediction is not none %}
+        <div class="result">
+            <h2>Prediction: {{ prediction }}</h2>
+            <div class="image-container">
+                {% if image_path %}
+                <div>
+                    <p>Uploaded Image:</p>
+                    <img src="{{ url_for('static', filename=image_path) }}" alt="Uploaded Image">
                 </div>
+                {% endif %}
+                {% if processed_image_path %}
+                <div>
+                    <p>Processed Image (28x28):</p>
+                    <img src="{{ url_for('static', filename=processed_image_path) }}" alt="Processed Image">
+                </div>
+                {% endif %}
             </div>
         </div>
+        {% endif %}
     </div>
-
-    <!-- Bootstrap JS and dependencies (Optional) -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 
 </html>
