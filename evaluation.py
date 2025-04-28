@@ -20,6 +20,3 @@ def plot_confusion_matrix(Y_test, Y_pred_labels):
 
 
 
-
-
-
